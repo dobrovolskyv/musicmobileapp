@@ -1,10 +1,10 @@
-import { View, Text, Button, TouchableOpacity } from 'react-native'
+import { View, Text, Button, TouchableOpacity, ImageBackground } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Audio } from 'expo-av';
 import Slider from '@react-native-community/slider';
 
 
-export default function Mus({ title, song, ...props }) {
+export default function Mus({ title, song,  ...props }) {
     const [sound, setSound] = useState();
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(1);
@@ -56,7 +56,7 @@ export default function Mus({ title, song, ...props }) {
     }
     return (
         <TouchableOpacity onPress={isPlaying ? togglePause : playSound} >
-            <View className={`border rounded-full w-24 h-24 ${props.className}`}>
+            <View className={`${props.className}`}>
                 <Text className='text-center'>{title}</Text>
                 {sound ? (
                     <View className='mt-5 bg-rose-600'>
