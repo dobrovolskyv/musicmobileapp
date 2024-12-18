@@ -1,10 +1,10 @@
-import { View, Text, Button, TouchableOpacity, ImageBackground } from 'react-native'
+import { View, Text, Button, TouchableOpacity, ImageBackground, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Audio } from 'expo-av';
 import Slider from '@react-native-community/slider';
 
 
-export default function Mus({ title, song,  ...props }) {
+export default function Mus({ title, song, img, ...props }) {
     const [sound, setSound] = useState();
     const [isPlaying, setIsPlaying] = useState(false);
     const [volume, setVolume] = useState(1);
@@ -55,23 +55,35 @@ export default function Mus({ title, song,  ...props }) {
         }
     }
     return (
-        <TouchableOpacity onPress={isPlaying ? togglePause : playSound} >
-            <View className={`${props.className}`}>
-                <Text className='text-center'>{title}</Text>
-                {sound ? (
-                    <View className='mt-5 bg-rose-600'>
-                        {song && (
-                            <Slider
-                                className="w-full h-full"
-                                minimumValue={0}
-                                maximumValue={1}
-                                value={volume}
-                                onValueChange={handleVolumeChange}
-                            />
-                        )}
-
-                    </View>
-                ) : ''}
+        <TouchableOpacity
+            onPress={isPlaying ? togglePause : playSound}
+            className="w-full h-full rounded-full "
+        >
+            {/* Внешний View для закругления и обрезки содержимого */}
+            <View className="w-full h-full rounded-full overflow-hidden ">
+                {/* Используем Image вместо ImageBackground */}
+                <Image
+                    source={img}
+                    className='w-full h-full rounded-full '
+                    resizeMode="cover"
+                />
+                {/* Текст и элементы управления */}
+                <View className={`absolute ${props.className}`}>
+                    <Text className="text-center text-white">{title}</Text>
+                    {sound && (
+                        <View className="mt-5 bg-rose-600 p-2">
+                            {song && (
+                                <Slider
+                                    className="w-full h-full"
+                                    minimumValue={0}
+                                    maximumValue={1}
+                                    value={volume}
+                                    onValueChange={handleVolumeChange}
+                                />
+                            )}
+                        </View>
+                    )}
+                </View>
             </View>
         </TouchableOpacity>
     )
