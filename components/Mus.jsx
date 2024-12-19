@@ -2,6 +2,7 @@ import { View, Text, Button, TouchableOpacity, ImageBackground, Image } from 're
 import React, { useState, useEffect } from 'react'
 import { Audio } from 'expo-av';
 import Slider from '@react-native-community/slider';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 
 export default function Mus({ title, song, img, ...props }) {
@@ -54,25 +55,44 @@ export default function Mus({ title, song, img, ...props }) {
             sound.setVolumeAsync(volume);
         }
     }
+
+
+    useEffect(() => {
+        const enableBackgroundAudio = async () => {
+            await Audio.setAudioModeAsync({
+                allowsRecordingIOS: false,
+                staysActiveInBackground: true,
+                interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+                playsInSilentModeIOS: true,
+                interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+                shouldDuckAndroid: true,
+                playThroughEarpieceAndroid: false,
+            });
+        };
+    
+        enableBackgroundAudio();
+    }, []);
     return (
         <TouchableOpacity
             onPress={isPlaying ? togglePause : playSound}
-            className="w-full h-full rounded-full "
+            className="w-full h-full rounded-full"
         >
             {/* Внешний View для закругления и обрезки содержимого */}
-            <View className="w-full h-full rounded-full overflow-hidden ">
+            <View className="flex justify-center items-center">
                 {/* Используем Image вместо ImageBackground */}
                 <Image
                     source={img}
-                    className='w-full h-full rounded-full '
+                    className='w-full h-full rounded-full'
                     resizeMode="cover"
                 />
                 {/* Текст и элементы управления */}
-                <View className={`absolute ${props.className}`}>
-                    <Text className="text-center text-white">{title}</Text>
-                    {sound && (
-                        <View className="mt-5 bg-rose-600 p-2">
-                            {song && (
+                <View className={`pt-10 text-2xl pl-20 absolute left-0 right-0 z-10 ${props.className}`}>
+                    {/* <Text className="text-center text-white text-6xl font-bold">{title}</Text> */}
+                    <Text className="text-center text-white mt-4">{isPlaying ? <AntDesign name="pause" size={30} color="white" /> : <AntDesign name="caretright" size={30} color="white" />
+                    }</Text>
+                    
+                        <View className="mt-10 pt-10">
+                       
                                 <Slider
                                     className="w-full h-full"
                                     minimumValue={0}
@@ -80,9 +100,9 @@ export default function Mus({ title, song, img, ...props }) {
                                     value={volume}
                                     onValueChange={handleVolumeChange}
                                 />
-                            )}
+                       
                         </View>
-                    )}
+                   
                 </View>
             </View>
         </TouchableOpacity>

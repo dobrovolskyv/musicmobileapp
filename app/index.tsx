@@ -14,39 +14,62 @@ export default function Home() {
     { id: 'rain', label: 'Дождь', image: require('../assets/imagessong/tropical.jpg'), background: require('../assets/imagessong/tropical.jpg'), song: "https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3" },
     { id: 'forest', label: 'Лес', image: require('../assets/imagessong/forest.jpg'), background: require('../assets/imagessong/forest.jpg'), song: "https://onlinetestcase.com/wp-content/uploads/2023/06/1-MB-MP3.mp3" },
     { id: 'mountin', label: 'Гора', image: require('../assets/imagessong/mountin.jpg'), background: require('../assets/imagessong/mountin.jpg'), song: "https://onlinetestcase.com/wp-content/uploads/2023/06/1-MB-MP3.mp3" },
+    { id: 'rain2', label: 'Дождь', image: require('../assets/imagessong/tropical.jpg'), background: require('../assets/imagessong/tropical.jpg'), song: "https://github.com/rafaelreis-hotmart/Audio-Sample-files/raw/master/sample.mp3" },
+    { id: 'forest2', label: 'Лес', image: require('../assets/imagessong/forest.jpg'), background: require('../assets/imagessong/forest.jpg'), song: "https://onlinetestcase.com/wp-content/uploads/2023/06/1-MB-MP3.mp3" },
+    { id: 'mountin2', label: 'Гора', image: require('../assets/imagessong/mountin.jpg'), background: require('../assets/imagessong/mountin.jpg'), song: "https://onlinetestcase.com/wp-content/uploads/2023/06/1-MB-MP3.mp3" },
   ];
 
   const currentItem = items.find((item) => item.id === selectedItem);
 
   return (
-    <ImageBackground source={currentItem?.background} className=' flex-1 justify-center items-center' blurRadius={10}>
-      <View className='justify-center items-center '>
-        //большой круг с основной картинкой
-        <View className='w-52 h-52 rounded-full bg-zinc-500 relative justify-center items-center mb-20'>
-          {/* <Image source={currentItem?.image} className="w-full h-full rounded-full" resizeMode='cover' /> */}
-           <Mus song={currentItem?.song} title={currentItem?.label} img={currentItem?.image} сlassName="absolute w-full top-0"/>
-        </View>
+    <ImageBackground source={currentItem?.background} className="flex-1 justify-center items-center" blurRadius={10}>
+    <View className="w-full h-full justify-center items-center">
+      {/* Большой круг с основной картинкой */}
+      <View className="w-[300px] h-[300px] rounded-full bg-zinc-500 justify-center items-center absolute -left-24">
+        <Mus 
+        song={currentItem?.song} 
+        title={currentItem?.label} 
+        img={currentItem?.image} 
 
-        //набор маленький кружков
-        <View className='flex-row justify-around w-10/12'>
-          {items.map((item) => (
+        items={items}className="w-[70%] h-full pt-20 pl-[0px]" />
+      </View>
+
+      {/* Набор маленьких кружков вокруг видимой части большого круга */}
+      <View style={{ position: 'absolute', width: 400, height: 400 }}>
+        {items.map((item, index) => {
+          const startAngle = -90; // Угол начала (верхний центр круга)
+          const endAngle = 90; // Угол конца (нижний центр круга)
+          const angle = startAngle + ((endAngle - startAngle) / (items.length - 1)) * index; // Распределение кружков
+          const radius = 220; // Радиус окружности
+          const x = radius * Math.cos((angle * Math.PI) / 180); // Координата X
+          const y = radius * Math.sin((angle * Math.PI) / 180); // Координата Y
+
+          return (
             <TouchableOpacity
               key={item.id}
-              className={`w-18 h-18 rounded-full bg-white/50 mx-2 items-center justify-center ${selectedItem === item.id ? 'border-2 border-yellow-400' : ''
-                }`}
+              style={{
+                position: 'absolute',
+                left: 80 + x - 40, // Центрируем относительно большого круга
+                top: 200 + y - 40, // Центрируем относительно большого круга
+                width: 84,
+                height: 84,
+                borderRadius: '50%',
+                backgroundColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderWidth: selectedItem === item.id ? 4 : 0,
+                borderColor: selectedItem === item.id ? 'yellow' : 'transparent',
+              }}
               onPress={() => setSelectedItem(item.id)}
             >
-           
-              <Image source={item.image} className='w-24 h-24 rounded-full' />
+              <Image source={item.image} style={{ width: 80, height: 80, borderRadius: '50%'}} />
             </TouchableOpacity>
-          ))}
-        </View>
+          );
+        })}
       </View>
-      
-
-       
-      <StatusBar barStyle="light-content" backgroundColor="#6200ee" />
-    </ImageBackground>
+    </View>
+    <StatusBar barStyle="light-content" backgroundColor="#6200ee" />
+  </ImageBackground>
   );
 }
 

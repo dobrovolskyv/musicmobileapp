@@ -1,9 +1,9 @@
 {
   "expo": {
     "name": "musicapp",
-    "slug": "musicapp",
+    "slug": "best",
     "version": "1.0.0",
-    "scheme": "musicapp",
+    "scheme": "kaif",
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -33,7 +33,6 @@
       "supportsTablet": true,
       "infoPlist": {
         "UIBackgroundModes": [
-          "audio",
           "audio"
         ]
       },
